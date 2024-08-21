@@ -1,0 +1,186 @@
+#include<iostream>
+#include<string>
+#include<cstdlib>
+using namespace std;
+class Vector{
+	int * elements;
+	int size;
+	int capacity;
+public:
+	Vector(){
+		elements = new int[10];
+		size = 0;
+		capacity = 10;
+	}
+	~Vector(){
+		delete[] elements;
+	}
+	int getSize(){
+		return size;
+	}
+	int getCapacity(){
+		return capacity;
+	}
+	bool empty(){
+		return size==0;
+	}
+	void push_back(int value){
+		if(size==capacity){
+			resize(capacity * 2);
+		}
+		elements[size++] = value;
+	}
+	void pop_back(){
+		if(empty()){
+			cout << "Vector is currently empty!";
+			return ;
+		}
+		size--;
+		cout << "Last element removed successfully." << endl << endl;
+	}
+	int & front(){
+		return elements[0];
+	}
+	int & back(){
+		return elements[size - 1];
+	}
+	void insert(int index, int value){
+		if(int i = index < 0 || index > size){
+			cout <<"Invalid Index!";
+			return;
+		}
+		if(size==capacity){
+			resize(capacity * 2);
+		}
+		for(int i = size - 1; i >= index; --i){
+			elements[i+1] = elements[i];
+		}
+		elements[index] = value;
+		size ++;
+	}
+	int & at(int index){
+		if(int i = index < 0 || index > size){
+			cout <<"Invalid Index!";
+		}
+		return elements[index];
+	}
+	void resize(int newCapacity){
+		int * newElements = new int[newCapacity];
+		for(int i = 0 ; i < size ; i++){
+			newElements[i] = elements[i];
+		}
+		delete[] elements;
+		elements = newElements;
+		capacity = newCapacity;
+	}
+	void erase(int index){
+		for(int i = index ; i < size - 1 ; ++i){
+			elements[i] = elements[i+1];
+		}
+		size--;
+	}
+	void swap(Vector& other){
+		size = other.size;
+		capacity = other.capacity;
+		for(int i = 0; i < size; ++i){
+			elements[i] = other.elements[i];
+		}
+	}
+	void clear(){
+		size = 0;
+	}
+	int* begin()const{
+		return elements;
+	}
+	int* end(){
+		return elements + size ;
+	}
+	void display(){
+		cout <<"Elements are : " << endl;
+		for(int i = 0; i < size; i ++){
+			cout <<"Element " << i << " is: " << elements[i] << endl;
+		}
+	}
+};
+							
+int main(){
+	Vector v1;
+	Vector v2;
+	cout <<"Testing push back...." << endl;
+	v1.push_back(1);
+	v1.push_back(2);
+	v1.push_back(3);
+	v1.display();
+	cout << endl << endl;
+	
+	cout <<"Testing swap...." << endl;
+	v2.swap(v1);
+	v2.display();
+	cout << endl << endl;
+	
+	cout <<"Testing getSize and getCapacity...." << endl;
+	if(v1.getSize() != 3 || v1.getCapacity()!= 10){
+		cout <<"Error in size or capacity!" << endl << endl;
+		return -1;
+	}
+	else{
+		cout <<"Size is 3 and capacity is 10." << endl << endl;
+	}
+	
+	cout <<"Testing empty...." << endl;
+	if(v1.empty()){
+		cout <<"The vector is Empty!";
+		return -1;
+	}
+	else{
+		cout <<"The vector is not empty. " << endl << endl;
+	}
+	
+	cout <<"Testing pop back...." << endl;
+	v1.pop_back();
+	v1.display();
+	cout << endl;
+	
+	cout << "Testing Front and Back...." << endl;
+	if(v1.front() != 1 || v1.back() != 2){
+		cout <<"First and last elements are not 1 and 2 respectively!" << endl << endl;
+		return -1;	
+	}
+	else{
+		cout <<"First Element is 1 and last element is 2." << endl << endl;
+	}
+	
+	cout << "Testing insert...." << endl;
+	cout <<"After insertion of 4: " << endl;
+	v1.insert(2,4);
+	v1.display();
+	cout << endl ;
+	
+	cout <<"Testing at....." << endl;
+	if(v1.at(1) != 2){
+		cout <<"2 is not on the second index!" << endl << endl;
+		return -1;
+	}
+	else{
+		cout <<"'2' is at index 1." << endl << endl;
+	}
+	
+	cout <<"Testing erase...." << endl;
+	v1.erase(0);
+	v1.display();
+	cout <<"Successfully removed '1'. " << endl << endl;
+
+	cout << "Elements displayed through begin and end are: " << endl;
+	for(int * i = v1.begin(); i != v1.end();++i){
+		cout <<"Element on address " << i << " is: " << *i << endl;
+	}
+	cout << endl;
+	cout <<"Testing clear...." << endl;
+	v1.clear();
+	if(v1.empty()){
+		cout <<"There is no element to display." << endl << endl;
+	}
+	cout << "Program Finished. " << endl << endl;
+	
+	return 0;
+}
